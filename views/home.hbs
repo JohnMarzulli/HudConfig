@@ -1,4 +1,43 @@
-<h2>Hello</h2>
-<p>The current time is: {{time}}</p>
 <h2>CONFIG</h2>
-<p>{{configJson}}</p>
+<p>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Value</th>
+        </tr>
+        <tr>
+            <td>Data Source</td>
+            <td>{{configJson.data_source}}</td>
+        </tr>
+        <tr>
+            <td>Data IP Address</td>
+            <td>{{configJson.stratux_address}}</td>
+        </tr>
+        <tr>
+            <td>OWNSHIP</td>
+            <td>{{configJson.ownship}}</td>
+        </tr>
+        <tr>
+            <td>No Report Removal Time</td>
+            <td>{{configJson.traffic_report_removal_minutes}}</td>
+        </tr>
+        <tr>
+            <td>Units</td>
+            <td>{{configJson.distance_units}}</td>
+        </tr>
+        <tr>
+            <td>Flip Horizontal</td>
+            <td>{{configJson.flip_horizontal}}</td>
+        </tr>
+        <tr>
+            <td>Flip Vertical</td>
+            <td>{{configJson.flip_vertical}}</td>
+        </tr>
+        <tr>
+            <td>Declination</td>
+            <td>{{configJson.declination}}</td>
+        </tr>
+    </table>
+</p>
+<br>
+<p>The current time is: {{time}}</p>
