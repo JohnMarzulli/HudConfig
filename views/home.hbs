@@ -7,23 +7,30 @@
         </tr>
         <tr>
             <td>Data Source</td>
-            <td>{{configJson.data_source}}</td>
+            <td><input type="text" value="{{configJson.data_source}}" /></td>
         </tr>
         <tr>
             <td>Data IP Address</td>
-            <td>{{configJson.stratux_address}}</td>
+            <td><input type="text" value="{{configJson.stratux_address}}" /></td>
         </tr>
         <tr>
             <td>OWNSHIP</td>
-            <td>{{configJson.ownship}}</td>
+            <td><input type="text" value="{{configJson.ownship}}" /></td>
         </tr>
         <tr>
             <td>No Report Removal Time</td>
-            <td>{{configJson.traffic_report_removal_minutes}}</td>
+            <td><input type="number" value="{{configJson.traffic_report_removal_minutes}}" /></td>
         </tr>
         <tr>
             <td>Units</td>
-            <td>{{configJson.distance_units}}</td>
+            <td>
+                <datalist id="units">
+                    <option value="statute">Statute</option>
+                    <option value="knots">Knots</option>
+                    <option value="metric">Metric</option>
+                </datalist>
+                <input list="units" value="{{configJson.distance_units}}"/>
+            </td>
         </tr>
         <tr>
             <td>Flip Horizontal</td>
@@ -35,7 +42,7 @@
         </tr>
         <tr>
             <td>Declination</td>
-            <td>{{configJson.declination}}</td>
+            <td><input type="number" value="{{configJson.declination}}" /></td>
         </tr>
     </table>
 </p>
