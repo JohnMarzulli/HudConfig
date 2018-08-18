@@ -1,23 +1,44 @@
-/*Techside Example CSS Static file for Express and Handlebars*/
+/* CSS Static file for Express and Handlebars */
 body {
-	text-align:center;
+  text-align: center;
+  background-color: whitesmoke
 }
-body img{
-	width:50%;
-	/*background-color:#ccc;
+body img {
+  width: 30%;
+  /*background-color:#ccc;
 	box-shadow: 2px 2px 2px #555;*/
 }
-body h2{
-	font-family: Arial, Helvetica, sans-serif, verdana, tahoma;
-	text-align:center;
-	font-size: 50pt;
-	/*
+body h2 {
+  margin-left: 10%;
+  margin-right: 10%;
+  background-color: teal;
+  color: whitesmoke;
+  font-family: Arial, Helvetica, sans-serif, verdana, tahoma;
+  text-align: center;
+  font-size: 30pt;
+  /*
 	text-shadow: -2px 2px 0px #666,
                  -4px 4px 0px #ccc,
 				 -6px 6px 2px #333;
 				 */
 }
-body p{
-	font-family: Arial, Helvetica, sans-serif, verdana, tahoma;
-	font-size: 24pt;
+body p {
+  font-family: Arial, Helvetica, sans-serif, verdana, tahoma;
+  font-size: 18pt;
+  align-content: center;
+  background-color: teal;
+  color: whitesmoke;
+  margin-left: 10%;
+  margin-right: 10%;
+}
+body table {
+  width: 50%;
+  font-size: 18pt;
+  align-self: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+body th {
+  box-shadow: 2px;
+  background-color: gray;
 }
