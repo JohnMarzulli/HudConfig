@@ -1,50 +1,62 @@
 <h2>CONFIG</h2>
+<datalist id="units">
+    <option value="statute">Statute</option>
+    <option value="knots">Knots</option>
+    <option value="metric">Metric</option>
+</datalist>
+<datalist id="boolean">
+    <option value="true">True</option>
+    <option value="false">False</option>
+</datalist>
 <p>
-    <table>
-        <tr>
-            <th>Name</th>
-            <th>Value</th>
-        </tr>
-        <tr>
-            <td>Data Source</td>
-            <td><input type="text" value="{{configJson.data_source}}" /></td>
-        </tr>
-        <tr>
-            <td>Data IP Address</td>
-            <td><input type="text" value="{{configJson.stratux_address}}" /></td>
-        </tr>
-        <tr>
-            <td>OWNSHIP</td>
-            <td><input type="text" value="{{configJson.ownship}}" /></td>
-        </tr>
-        <tr>
-            <td>No Report Removal Time</td>
-            <td><input type="number" value="{{configJson.traffic_report_removal_minutes}}" /></td>
-        </tr>
-        <tr>
-            <td>Units</td>
-            <td>
-                <datalist id="units">
-                    <option value="statute">Statute</option>
-                    <option value="knots">Knots</option>
-                    <option value="metric">Metric</option>
-                </datalist>
-                <input list="units" value="{{configJson.distance_units}}"/>
-            </td>
-        </tr>
-        <tr>
-            <td>Flip Horizontal</td>
-            <td>{{configJson.flip_horizontal}}</td>
-        </tr>
-        <tr>
-            <td>Flip Vertical</td>
-            <td>{{configJson.flip_vertical}}</td>
-        </tr>
-        <tr>
-            <td>Declination</td>
-            <td><input type="number" value="{{configJson.declination}}" /></td>
-        </tr>
-    </table>
+    <form action="/" method="POST">
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Value</th>
+            </tr>
+            <tr>
+                <td>Data Source</td>
+                <td><input name="data_source" id="data_source" type="text" value="{{configJson.data_source}}" /></td>
+            </tr>
+            <tr>
+                <td>Data IP Address</td>
+                <td><input name="stratux_address" id="stratux_address" type="text" value="{{configJson.stratux_address}}" /></td>
+            </tr>
+            <tr>
+                <td>OWNSHIP</td>
+                <td><input name="ownship" id="ownship" type="text" value="{{configJson.ownship}}" /></td>
+            </tr>
+            <tr>
+                <td>No Report Removal Time</td>
+                <td><input name="traffic_report_removal_minutes" id="traffic_report_removal_minutes" type="number" value="{{configJson.traffic_report_removal_minutes}}"
+                    /></td>
+            </tr>
+            <tr>
+                <td>Units</td>
+                <td>
+                    <input name="distance_units" id="distance_units" list="units" value="{{configJson.distance_units}}" />
+                </td>
+            </tr>
+            <tr>
+                <td>Flip Horizontal</td>
+                <td>
+                    <input name="flip_horizontal" id="flip_horizontal" list="boolean" value="{{configJson.flip_horizontal}}" />
+                </td>
+            </tr>
+            <tr>
+                <td>Flip Vertical</td>
+                <td><input name="flip_vertical" id="flip_vertical" list="boolean" value="{{configJson.flip_vertical}}" /></td>
+            </tr>
+            <tr>
+                <td>Declination</td>
+                <td><input name="declination" id="declination" type="number" value="{{configJson.declination}}" /></td>
+            </tr>
+        </table>
+        <br>
+        <br>
+        <input type="submit" value="UPDATE" />
+    </form>
 </p>
 <br>
 <p>The current time is: {{time}}</p>
