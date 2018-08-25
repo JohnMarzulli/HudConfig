@@ -1,4 +1,5 @@
 // index.js
+//@ts-check
 const path = require("path");
 const https = require("http");
 const request = require("request");
@@ -93,17 +94,16 @@ function handleSettingResponse(restRes, resolve, reject) {
 
 function getHudConfig() {
   return new Promise((resolve, reject) => {
-    try {
-      https
-        .request(getConfigOptions, function(restRes) {
-          console.log("GET STATUS: " + restRes.statusCode);
-
-          handleSettingResponse(restRes, resolve, reject);
-        })
-        .end();
-    } catch (err) {
-      resolve({ error: err });
-    }
+    request
+      .get(getPutConfigOptions()["url"])
+      .on("error", function(err) {
+        console.log(err);
+        reject(err.message);
+      })
+      .on("response", function(response) {
+        response.body;
+        handleSettingResponse(response, resolve, reject);
+      });
   });
 }
 
@@ -117,6 +117,15 @@ function postHudConfig(updateHash) {
   });
 }
 
+function renderRefused(response, error) {
+  console.log("Render");
+
+  response.render("refused", {
+    error: error,
+    time: dateformat(Date.now(), "dd-mm-yy hh:MM:ss TT")
+  });
+}
+
 function renderPage(response, jsonConfig) {
   console.log("Render");
   response.render("home", {
@@ -126,9 +135,13 @@ function renderPage(response, jsonConfig) {
 }
 
 app.get("/", (request, response) => {
-  getHudConfig().then(function(jsonConfig) {
-    renderPage(response, jsonConfig);
-  });
+  getHudConfig()
+    .then(function(jsonConfig) {
+      renderPage(response, jsonConfig);
+    })
+    .catch(function(error) {
+      renderRefused(response, error);
+    });
 });
 
 app.use(express.static(__dirname + "/public"));
