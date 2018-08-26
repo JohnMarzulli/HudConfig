@@ -1,0 +1,55 @@
+<h2>NEW CONFIG</h2>
+<datalist id="units">
+    <option value="statute">Statute</option>
+    <option value="knots">Knots</option>
+    <option value="metric">Metric</option>
+</datalist>
+<datalist id="boolean">
+    <option value="true">True</option>
+    <option value="false">False</option>
+</datalist>
+<p>
+    <form action="/" method="POST">
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Value</th>
+            </tr>
+            <tr>
+                <td>Data Source</td>
+                <td>{{configJson.data_source}}</td>
+            </tr>
+            <tr>
+                <td>Data IP Address</td>
+                <td>{{configJson.stratux_address}}</td>
+            </tr>
+            <tr>
+                <td>OWNSHIP</td>
+                <td>{{configJson.ownship}}</td>
+            </tr>
+            <tr>
+                <td>No Report Removal Time</td>
+                <td>{{configJson.traffic_report_removal_minutes}}</td>
+            </tr>
+            <tr>
+                <td>Units</td>
+                <td>{{configJson.distance_units}}</td>
+            </tr>
+            <tr>
+                <td>Flip Horizontal</td>
+                <td>{{configJson.flip_horizontal}}</td>
+            </tr>
+            <tr>
+                <td>Flip Vertical</td>
+                <td>{{configJson.flip_vertical}}</td>
+            </tr>
+            <tr>
+                <td>Declination</td>
+                <td>{{configJson.declination}}</td>
+            </tr>
+        </table>
+        <br>
+    </form>
+</p>
+<br>
+<p>The current time is: {{time}}</p>

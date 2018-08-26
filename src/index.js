@@ -1,13 +1,19 @@
 // index.js
-//@ts-check
+// @ts-check
+
 const path = require("path");
-const https = require("http");
 const request = require("request");
 const dateformat = require("dateformat");
 const express = require("express");
 const bodyParser = require("body-parser");
-const exphbs = require("express-handlebars");
-const port = 3000;
+const expressHandlebars = require("express-handlebars");
+const isPi = require("detect-rpi");
+
+var port = 3000;
+
+if (isPi()) {
+  port = 80;
+}
 
 /**
  * Updates the hash/dictionary that will be sent in a PUT to the HUD.
@@ -31,14 +37,7 @@ function mergeIntoHash(hash, key, value) {
 
 const app = express();
 
-var getConfigOptions = {
-  hostname: "localhost",
-  path: "/settings",
-  method: "GET",
-  port: 8080
-};
-
-function getPutConfigOptions(payload) {
+function getHudUrl(payload) {
   return {
     url: "http://localhost:8080/settings",
     //hostname: "localhost",
@@ -70,14 +69,14 @@ function getBoolean(inputString) {
 
 app.engine(
   ".hbs",
-  exphbs({
+  expressHandlebars({
     defaultLayout: "main",
     extname: ".hbs",
-    layoutsDir: path.join(__dirname, "views/layouts")
+    layoutsDir: path.join(__dirname, "../views/layouts")
   })
 );
 app.set("view engine", ".hbs");
-app.set("views", path.join(__dirname, "views"));
+app.set("views", path.join(__dirname, "../views"));
 
 var jsonResultText = "";
 
@@ -95,7 +94,7 @@ function handleSettingResponse(restRes, resolve, reject) {
 function getHudConfig() {
   return new Promise((resolve, reject) => {
     request
-      .get(getPutConfigOptions()["url"])
+      .get(getHudUrl()["url"])
       .on("error", function(err) {
         console.log(err);
         reject(err.message);
@@ -108,7 +107,7 @@ function getHudConfig() {
 }
 
 function postHudConfig(updateHash) {
-  var options = getPutConfigOptions(JSON.stringify(updateHash));
+  var options = getHudUrl(JSON.stringify(updateHash));
 
   request(options, function(error, response, body) {
     if (error) throw new Error(error);
@@ -126,9 +125,9 @@ function renderRefused(response, error) {
   });
 }
 
-function renderPage(response, jsonConfig) {
+function renderPage(response, jsonConfig, page = "home") {
   console.log("Render");
-  response.render("home", {
+  response.render(page, {
     time: dateformat(Date.now(), "dd-mm-yy hh:MM:ss TT"),
     configJson: jsonConfig
   });
@@ -144,7 +143,7 @@ app.get("/", (request, response) => {
     });
 });
 
-app.use(express.static(__dirname + "/public"));
+app.use(express.static(path.join(__dirname, "../public")));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -183,7 +182,7 @@ app.post("/", function(request, response) {
   );
 
   postHudConfig(updateHash);
-  renderPage(response, updateHash);
+  renderPage(response, updateHash, "current_config");
 });
 
 app.use(function(request, response) {
