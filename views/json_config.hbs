@@ -1,0 +1,10 @@
+<h2>{{title}} CONFIG</h2>
+<p>
+    <form action="{{path}}" method="POST">
+        <textarea type="text" name="configJson" id="configJson" rows={{rowCount}}>{{configJson}}</textarea>
+        <br>
+        <input {{disabled}} type="submit" value="UPDATE" />
+    </form>
+</p>
+<br>
+<p>The current time is: {{time}}</p>

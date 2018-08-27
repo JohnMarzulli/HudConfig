@@ -26,6 +26,7 @@ body p {
   font-family: Arial, Helvetica, sans-serif, verdana, tahoma;
   font-size: 18pt;
   align-content: center;
+  align-self: center;
   background-color: whitesmoke;
   color: black;
   margin-left: 10%;
@@ -41,4 +42,15 @@ body table {
 body th {
   box-shadow: 2px;
   background-color: gray;
+}
+body form{
+  align-self: center;
+  align-content: center;
+}
+body textarea {
+  width: 75%;
+  font-size: 12pt;
+  align-self: center;
+  align-content: center;
+  font-family: 'Courier New', Courier, monospace
 }
