@@ -1,7 +1,9 @@
 /* CSS Static file for Express and Handlebars */
 body {
+  width: 100%;
+  padding: -10%;
   text-align: center;
-  background-color: whitesmoke
+  background-color: whitesmoke;
 }
 body img {
   width: 30%;
@@ -12,7 +14,7 @@ body h2 {
   margin-left: 10%;
   margin-right: 10%;
   background-color: teal;
-  color: whitesmoke;
+  color: white;
   font-family: Arial, Helvetica, sans-serif, verdana, tahoma;
   text-align: center;
   font-size: 30pt;
@@ -29,8 +31,8 @@ body p {
   align-self: center;
   background-color: whitesmoke;
   color: black;
-  margin-left: 10%;
-  margin-right: 10%;
+  margin-left: 0%;
+  margin-right: 0%;
 }
 body table {
   width: 50%;
@@ -43,14 +45,63 @@ body th {
   box-shadow: 2px;
   background-color: gray;
 }
-body form{
+body form {
   align-self: center;
   align-content: center;
 }
 body textarea {
-  width: 75%;
+  width: 100%;
   font-size: 12pt;
   align-self: center;
   align-content: center;
-  font-family: 'Courier New', Courier, monospace
+  font-family: "Courier New", Courier, monospace;
+}
+
+input[type="submit"] {
+  size: 150%;
+  font-family: Arial, Helvetica, sans-serif, verdana, tahoma;
+  font-size: 32pt;
+  font-weight: bolder;
+  border: 1;
+  border-color: black;
+  background: none;
+  box-shadow: none;
+  border-radius: none;
+  -webkit-appearance: none;
+  background-color: white;
+  color: teal;
+}
+
+input[type="submit"]:hover {
+  background-color: teal;
+  color: white;
+}
+
+input[type="submit"]:disabled {
+  background-color: lightgray;
+  color: whitesmoke;
+}
+
+a:link,
+a:visited {
+  font-family: Arial, Helvetica, sans-serif, verdana, tahoma;
+  font-weight: bold;
+  outline: none;
+  text-decoration: none;
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  min-width: 100%;
+  border: 0;
+  text-align: center;
+  vertical-align: center;
+  background-color: white;
+  color: teal;
+  padding: 40px, 60px;
+}
+
+body table a:hover {
+  background-color: teal;
+  color: white;
 }
