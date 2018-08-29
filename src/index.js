@@ -10,22 +10,29 @@ const expressHandlebars = require("express-handlebars");
 const ip = require("ip");
 const isPi = require("detect-rpi");
 
-var hostAddress = "localhost";
-var port = 3000;
 
-if (isPi())
+function getAddress()
 {
-  console.log("Running on HUD");
-  hostAddress = ip.address();
-  port = 80;
+  var hostAddress = ip.address();
+  //return isPi() ? hostAddress : "localhost";
+  return hostAddress;
 }
 
-var hostScheme = "http";
-var hostUri = hostScheme + "://" + hostAddress + ":8080";
+function getWebServerPort()
+{
+  return isPi() ? 80 : 3000;
+}
 
+function getHudRestUri()
+{
+  var hostScheme = "http";
+  var hostUri = hostScheme + "://" + getAddress() + ":8080";
 
-console.log("Assuming HUD can be contacted at " + hostUri);
-console.log("Starting Web/NodeJs on " + port);
+  return hostUri;
+}
+
+console.log("Assuming HUD can be contacted at " + getHudRestUri());
+console.log("Starting Web/NodeJs on " + getWebServerPort());
 
 
 /**
@@ -52,7 +59,7 @@ const app = express();
 
 function getHudUrl(payload) {
   return {
-    url: hostUri + "/settings",
+    url: getHudRestUri() + "/settings",
     //hostname: "localhost",
     //path: "/settings",
     //port: 8080,
@@ -64,7 +71,7 @@ function getHudUrl(payload) {
 
 function getHudElements(payload) {
   return {
-    url: hostUri + "/view_elements",
+    url: getHudRestUri() + "/view_elements",
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: payload
@@ -73,7 +80,7 @@ function getHudElements(payload) {
 
 function getHudViews(payload) {
   return {
-    url: hostUri + "/views",
+    url: getHudRestUri() + "/views",
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: payload
@@ -330,4 +337,4 @@ app.use(function(request, response) {
   response.render("404");
 });
 
-app.listen(port);
+app.listen(getWebServerPort());
