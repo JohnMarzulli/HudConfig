@@ -80,9 +80,14 @@ function getNumber(inputString) {
 
 function getBoolean(inputString) {
   try {
+    if(inputString == undefined)
+    {
+      return false;
+    }
+    
     inputString = inputString.toLowerCase();
 
-    return inputString == "true";
+    return inputString == "true" || inputString == "on";
   } catch (error) {
     return false;
   }
