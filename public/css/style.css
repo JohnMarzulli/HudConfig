@@ -24,6 +24,15 @@ body h2 {
 				 -6px 6px 2px #333;
 				 */
 }
+body h3 {
+  color: teal;
+  font-style: oblique;
+  font-weight: bolder;
+  /*
+  text-decoration: overline underline;
+  text-decoration-color: gray;
+  */
+}
 body p {
   font-family: Arial, Helvetica, sans-serif, verdana, tahoma;
   font-size: 18pt;
@@ -41,9 +50,14 @@ body table {
   margin-left: auto;
   margin-right: auto;
 }
+body td {
+  vertical-align: top;
+}
 body th {
-  box-shadow: 2px;
+  box-shadow: 0px;
   background-color: gray;
+  color: white;
+  font-weight: bolder;
 }
 body form {
   align-self: center;
@@ -59,7 +73,6 @@ body textarea {
 
 input[type="submit"] {
   size: 150%;
-  font-family: Arial, Helvetica, sans-serif, verdana, tahoma;
   font-size: 32pt;
   font-weight: bolder;
   border: 1;
@@ -70,6 +83,9 @@ input[type="submit"] {
   -webkit-appearance: none;
   background-color: white;
   color: teal;
+}
+input[type="checkbox"] {
+  -webkit-appearance: checkbox;
 }
 
 input[type="submit"]:hover {
@@ -104,4 +120,97 @@ a:visited {
 body table a:hover {
   background-color: teal;
   color: white;
+}
+
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {display:none;}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: gray;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: whitesmoke;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: teal;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px teal;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 26px;
+}
+
+/* Radio Buttons */
+.form-radio
+{
+     -webkit-appearance: none;
+     -moz-appearance: none;
+     appearance: none;
+     display: inline-block;
+     position: relative;
+     background-color: gray;
+     color: black;
+     top: 10px;
+     height: 30px;
+     width: 30px;
+     border: 0;
+     border-radius: 60px;
+     margin-right: 10px;
+     outline: none;
+     padding-bottom: 10px;
+}
+.form-radio:hover
+{
+     background-color: teal;
+}
+.form-radio:checked
+{
+     background-color: teal;
+}
+label
+{
+     font: 300 16px/1.7 'Open Sans', sans-serif;
+     color: gray;
+     cursor: pointer;
 }
