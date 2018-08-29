@@ -9,7 +9,56 @@
     <option value="false">False</option>
 </datalist>
 <p>
-    <form action="/" method="POST">
+    <form name="settingsForm" action="/" method="POST">
+    <h3>Common Settings</h3>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Value</th>
+            </tr>
+            <tr>
+                <td>Ownship</td>
+                <td><input name="ownship" id="ownship" type="text" value="{{configJson.ownship}}" /></td>
+            </tr>
+            <tr>
+                <td>No Report Removal Time</td>
+                <td><input name="traffic_report_removal_minutes" id="traffic_report_removal_minutes" type="number" value="{{configJson.traffic_report_removal_minutes}}"
+                    /></td>
+            </tr>
+            <tr>
+                <td>Units</td>
+                <td style="align-items: flex-start; align-content: flex-start; text-align: left;">
+                    <input type="radio" name="distance_units" class="form-radio" value="statute">&nbsp;Statute<br>
+                    <input type="radio" name="distance_units" class="form-radio" value="knots">&nbsp;Knots<br>
+                    <input type="radio" name="distance_units" class="form-radio" value="metric">&nbsp;Metric<br><br>
+                </td>
+            </tr>
+            <tr>
+                <td>Flip Horizontal</td>
+                <td style="align-items: flex-start; align-content: flex-start; text-align: left;">
+                    <label class="switch">
+                        <input name="flip_horizontal" id="flip_horizontal" type="checkbox">
+                        <span class="slider round"></span>
+                    </label>
+                </td>
+            </tr>
+            <tr>
+                <td>Flip Vertical</td>
+                <td style="align-items: flex-start; align-content: flex-start; text-align: left;">
+                    <label class="switch">
+                        <input name="flip_vertical" id="flip_vertical" type="checkbox">
+                        <span class="slider round"></span>
+                    </label>
+                </td>
+            </tr>
+            <tr>
+                <td>Declination</td>
+                <td><input name="declination" id="declination" type="number" value="{{configJson.declination}}" /></td>
+            </tr>
+        </table>
+        <br>
+        <br>
+        <h3>Dangerous Settings</h3>
         <table>
             <tr>
                 <th>Name</th>
@@ -25,40 +74,22 @@
                     <input name="stratux_address" id="stratux_address" type="text" value="{{configJson.stratux_address}}" />
                 </td>
             </tr>
-            <tr>
-                <td>Ownship</td>
-                <td><input name="ownship" id="ownship" type="text" value="{{configJson.ownship}}" /></td>
-            </tr>
-            <tr>
-                <td>No Report Removal Time</td>
-                <td><input name="traffic_report_removal_minutes" id="traffic_report_removal_minutes" type="number" value="{{configJson.traffic_report_removal_minutes}}"
-                    /></td>
-            </tr>
-            <tr>
-                <td>Units</td>
-                <td>
-                    <input name="distance_units" id="distance_units" list="units" value="{{configJson.distance_units}}" />
-                </td>
-            </tr>
-            <tr>
-                <td>Flip Horizontal</td>
-                <td>
-                    <input name="flip_horizontal" id="flip_horizontal" list="boolean" value="{{configJson.flip_horizontal}}" />
-                </td>
-            </tr>
-            <tr>
-                <td>Flip Vertical</td>
-                <td><input name="flip_vertical" id="flip_vertical" list="boolean" value="{{configJson.flip_vertical}}" /></td>
-            </tr>
-            <tr>
-                <td>Declination</td>
-                <td><input name="declination" id="declination" type="number" value="{{configJson.declination}}" /></td>
-            </tr>
         </table>
         <br>
         <br>
         <input type="submit" value="UPDATE" />
     </form>
+    <script>
+        document.getElementById("flip_horizontal").checked = {{configJson.flip_horizontal}};
+        document.getElementById("flip_vertical").checked = {{configJson.flip_vertical}};
+        var units = "{{configJson.distance_units}}";
+        if(units.length < 1)
+        {
+            units = "statute";
+        }
+
+        document.settingsForm.distance_units.value = units;
+    </script>
 </p>
 <br>
 <p>Page load at {{time}}</p>
