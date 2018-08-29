@@ -7,16 +7,26 @@ const dateformat = require("dateformat");
 const express = require("express");
 const bodyParser = require("body-parser");
 const expressHandlebars = require("express-handlebars");
+const ip = require("ip");
 const isPi = require("detect-rpi");
 
-var port = 3000;
-var hostScheme = "http";
 var hostAddress = "localhost";
-var hostUri = hostScheme + "://" + hostAddress + ":8080";
+var port = 3000;
 
-if (isPi()) {
+if (isPi())
+{
+  console.log("Running on HUD");
+  hostAddress = ip.address();
   port = 80;
 }
+
+var hostScheme = "http";
+var hostUri = hostScheme + "://" + hostAddress + ":8080";
+
+
+console.log("Assuming HUD can be contacted at " + hostUri);
+console.log("Starting Web/NodeJs on " + port);
+
 
 /**
  * Updates the hash/dictionary that will be sent in a PUT to the HUD.
