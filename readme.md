@@ -211,6 +211,28 @@ _*NOTE:*_ Capitalization and spelling matter when using these to modify the [Vie
 }
 ```
 
+## Installation
+
+1. `cd ~`
+2. `curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -`
+    1. If you see an error, run this again. It may take a few tries.
+3. `sudo apt install nodejs`
+4. `sudo apt install npm`. Answer yes to all.
+5. `git clone https://github.com/JohnMarzulli/HudConfig`
+6. `cd HudConfig`
+7. `npm install`
+8. `npm install request`
+9. `npm install dateformat`
+10. `npm install express`
+11. `npm install express-handlebars`
+12. `npm install detect-rpi`
+13. `npm install ip`
+14. `crontab -e`
+    1. Add a line at the bottom:
+    2. `@reboot sudo nodejs /home/pi/HudConfig/src/index.js &`
+15. Save the file.
+16. `sudo reboot now`
+
 ## License
 
 This project is covered by the GPL v3 license.
