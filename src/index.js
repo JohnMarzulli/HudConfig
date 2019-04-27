@@ -308,6 +308,11 @@ app.post("/", function(request, response) {
   );
   updateHash = mergeIntoHash(
     updateHash,
+    "aithre",
+    getBoolean(request.body.aithre)
+  );
+  updateHash = mergeIntoHash(
+    updateHash,
     "flip_horizontal",
     getBoolean(request.body.flip_horizontal)
   );

@@ -34,6 +34,15 @@
                 </td>
             </tr>
             <tr>
+                <td>Aithre</td>
+                <td style="align-items: flex-start; align-content: flex-start; text-align: left;">
+                    <label class="switch">
+                        <input name="aithre" id="aithre" type="checkbox">
+                        <span class="slider round"></span>
+                    </label>
+                </td>
+            </tr>
+            <tr>
                 <td>Flip Horizontal</td>
                 <td style="align-items: flex-start; align-content: flex-start; text-align: left;">
                     <label class="switch">
@@ -82,6 +91,7 @@
     <script>
         document.getElementById("flip_horizontal").checked = {{configJson.flip_horizontal}};
         document.getElementById("flip_vertical").checked = {{configJson.flip_vertical}};
+        document.getElementById("aithre").checked = {{configJson.aithre}};
         var units = "{{configJson.distance_units}}";
         if(units.length < 1)
         {
