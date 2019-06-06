@@ -11,20 +11,17 @@ const ip = require("ip");
 const isPi = require("detect-rpi");
 
 
-function getAddress()
-{
+function getAddress() {
   var hostAddress = ip.address();
   //return isPi() ? hostAddress : "localhost";
   return hostAddress;
 }
 
-function getWebServerPort()
-{
+function getWebServerPort() {
   return isPi() ? 80 : 3000;
 }
 
-function getHudRestUri()
-{
+function getHudRestUri() {
   var hostScheme = "http";
   var hostUri = hostScheme + "://" + getAddress() + ":8080";
 
@@ -97,8 +94,7 @@ function getNumber(inputString) {
 
 function getBoolean(inputString) {
   try {
-    if(inputString == undefined)
-    {
+    if (inputString == undefined) {
       return false;
     }
     
@@ -125,7 +121,7 @@ var jsonResultText = "";
 
 function handleSettingResponse(restRes, resolve, reject) {
   if (restRes.statusCode >= 200 && restRes.statusCode < 300) {
-    restRes.on("data", function(jsonResult) {
+    restRes.on("data", function (jsonResult) {
       console.log("BODY: " + jsonResult);
       resolve(JSON.parse(JSON.parse(jsonResult)));
     });
@@ -136,7 +132,7 @@ function handleSettingResponse(restRes, resolve, reject) {
 
 function handleJsonResponse(restRes, resolve, reject) {
   if (restRes.statusCode >= 200 && restRes.statusCode < 300) {
-    restRes.on("data", function(jsonResult) {
+    restRes.on("data", function (jsonResult) {
       console.log("BODY: " + jsonResult);
       resolve(JSON.parse(jsonResult));
     });
@@ -149,11 +145,11 @@ function getHudConfig() {
   return new Promise((resolve, reject) => {
     request
       .get(getHudUrl()["url"])
-      .on("error", function(err) {
+      .on("error", function (err) {
         console.log(err);
         reject(err.message);
       })
-      .on("response", function(response) {
+      .on("response", function (response) {
         handleSettingResponse(response, resolve, reject);
       });
   });
@@ -163,11 +159,11 @@ function getViewElementsConfig() {
   return new Promise((resolve, reject) => {
     request
       .get(getHudElements()["url"])
-      .on("error", function(err) {
+      .on("error", function (err) {
         console.log(err);
         reject(err.message);
       })
-      .on("response", function(response) {
+      .on("response", function (response) {
         handleJsonResponse(response, resolve, reject);
       });
   });
@@ -177,11 +173,11 @@ function getViewsConfig() {
   return new Promise((resolve, reject) => {
     request
       .get(getHudViews()["url"])
-      .on("error", function(err) {
+      .on("error", function (err) {
         console.log(err);
         reject(err.message);
       })
-      .on("response", function(response) {
+      .on("response", function (response) {
         response.body;
         handleJsonResponse(response, resolve, reject);
       });
@@ -191,7 +187,7 @@ function getViewsConfig() {
 function postHudConfig(updateHash) {
   var options = getHudUrl(JSON.stringify(updateHash));
 
-  request.put(getHudViews["url"], options).on("error", function(error) {
+  request.put(getHudViews["url"], options).on("error", function (error) {
     console.log(error);
   });
 }
@@ -202,7 +198,7 @@ function postViews(viewConfigs) {
   };
   var options = getHudViews(JSON.stringify(updateHash));
 
-  request(options, function(error, response, body) {
+  request(options, function (error, response, body) {
     if (error) throw new Error(error);
 
     console.log(body);
@@ -245,7 +241,7 @@ function renderViewPage(response, path, jsonConfig, title, updateEnabled) {
 
 app.get("/view_elements", (request, response) => {
   getViewElementsConfig()
-    .then(function(jsonConfig) {
+    .then(function (jsonConfig) {
       renderViewPage(
         response,
         "/view_elements",
@@ -254,27 +250,27 @@ app.get("/view_elements", (request, response) => {
         false
       );
     })
-    .catch(function(error) {
+    .catch(function (error) {
       renderRefused(response, error);
     });
 });
 
 app.get("/views", (request, response) => {
   getViewsConfig()
-    .then(function(jsonConfig) {
+    .then(function (jsonConfig) {
       renderViewPage(response, "/views", jsonConfig, "Elements", true);
     })
-    .catch(function(error) {
+    .catch(function (error) {
       renderRefused(response, error);
     });
 });
 
 app.get("/", (request, response) => {
   getHudConfig()
-    .then(function(jsonConfig) {
+    .then(function (jsonConfig) {
       renderPage(response, jsonConfig);
     })
-    .catch(function(error) {
+    .catch(function (error) {
       renderRefused(response, error);
     });
 });
@@ -283,7 +279,7 @@ app.use(express.static(path.join(__dirname, "../public")));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.post("/views", function(request, response) {
+app.post("/views", function (request, response) {
   postViews(request.body.configJson);
   renderViewPage(
     response,
@@ -294,7 +290,7 @@ app.post("/views", function(request, response) {
   );
 });
 
-app.post("/", function(request, response) {
+app.post("/", function (request, response) {
   var updateHash = mergeIntoHash({}, "data_source", request.body.data_source);
   updateHash = mergeIntoHash(
     updateHash,
@@ -321,7 +317,6 @@ app.post("/", function(request, response) {
     "flip_vertical",
     getBoolean(request.body.flip_vertical)
   );
-  updateHash = mergeIntoHash(updateHash, "ownship", request.body.ownship);
   updateHash = mergeIntoHash(
     updateHash,
     "stratux_address",

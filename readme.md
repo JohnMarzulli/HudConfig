@@ -39,10 +39,6 @@ Setting to `simulation` will ignore the ADS-B receiver and run it in a "demo mod
 This is the address of the ADS-B receiver that the HUD will draw data from.
 This should be `192.168.10.1` 99% of the time.
 
-#### Ownship
-
-This is the tail number of the aircraft the HUD is installed in. Any traffic with this tail number is filtered out.
-
 #### No Report Removal Time
 
 This is the number of minutes after a _*not*_ receiving a report that traffic is removed from the view.
