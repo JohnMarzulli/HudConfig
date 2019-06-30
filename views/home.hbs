@@ -17,10 +17,6 @@
                 <th>Value</th>
             </tr>
             <tr>
-                <td>Ownship</td>
-                <td><input name="ownship" id="ownship" type="text" value="{{configJson.ownship}}" /></td>
-            </tr>
-            <tr>
                 <td>No Report Removal Time</td>
                 <td><input name="traffic_report_removal_minutes" id="traffic_report_removal_minutes" type="number" value="{{configJson.traffic_report_removal_minutes}}"
                     /></td>
@@ -31,6 +27,15 @@
                     <input type="radio" name="distance_units" class="form-radio" value="statute">&nbsp;Statute<br>
                     <input type="radio" name="distance_units" class="form-radio" value="knots">&nbsp;Knots<br>
                     <input type="radio" name="distance_units" class="form-radio" value="metric">&nbsp;Metric<br><br>
+                </td>
+            </tr>
+            <tr>
+                <td>Aithre</td>
+                <td style="align-items: flex-start; align-content: flex-start; text-align: left;">
+                    <label class="switch">
+                        <input name="aithre" id="aithre" type="checkbox">
+                        <span class="slider round"></span>
+                    </label>
                 </td>
             </tr>
             <tr>
@@ -82,6 +87,7 @@
     <script>
         document.getElementById("flip_horizontal").checked = {{configJson.flip_horizontal}};
         document.getElementById("flip_vertical").checked = {{configJson.flip_vertical}};
+        document.getElementById("aithre").checked = {{configJson.aithre}};
         var units = "{{configJson.distance_units}}";
         if(units.length < 1)
         {
