@@ -210,12 +210,11 @@ _*NOTE:*_ Capitalization and spelling matter when using these to modify the [Vie
 ## Installation
 
 1. `cd ~`
-2. `curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -`
-    1. If you see an error, run this again. It may take a few tries.
+2. `git clone https://github.com/JohnMarzulli/HudConfig`
+3. `cd HudConfig`
+4. `./install_hudconfig_raspberry_pi.sh`
 3. `sudo apt install nodejs`
 4. `sudo apt install npm`. Answer yes to all.
-5. `git clone https://github.com/JohnMarzulli/HudConfig`
-6. `cd HudConfig`
 7. `npm install`
 8. `npm install request`
 9. `npm install dateformat`
