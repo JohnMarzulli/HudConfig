@@ -1,3 +1,18 @@
+<h2>VIEW</h2>
+<table>
+    <tr>
+        <td>
+            <form name="previousView" action="/view/previous" method="GET">
+                <input type="submit" id="previous" value="Previous" >
+            </form>
+        </td>
+        <td>
+            <form name="nextView" action="/view/next" method="GET">
+                <input type="submit" id="next" value="Next">
+            </form>
+        </td>
+    </tr>
+</table>
 <h2>CONFIG</h2>
 <datalist id="units">
     <option value="statute">Statute</option>
@@ -10,7 +25,7 @@
 </datalist>
 <p>
     <form name="settingsForm" action="/" method="POST">
-    <h3>Common Settings</h3>
+        <h3>Common Settings</h3>
         <table>
             <tr>
                 <th>Name</th>
@@ -18,8 +33,8 @@
             </tr>
             <tr>
                 <td>No Report Removal Time</td>
-                <td><input name="traffic_report_removal_minutes" id="traffic_report_removal_minutes" type="number" value="{{configJson.traffic_report_removal_minutes}}"
-                    /></td>
+                <td><input name="traffic_report_removal_minutes" id="traffic_report_removal_minutes" type="number"
+                        value="{{configJson.traffic_report_removal_minutes}}" /></td>
             </tr>
             <tr>
                 <td>Units</td>
@@ -76,7 +91,8 @@
             <tr>
                 <td>Data IP Address</td>
                 <td>
-                    <input name="stratux_address" id="stratux_address" type="text" value="{{configJson.stratux_address}}" />
+                    <input name="stratux_address" id="stratux_address" type="text"
+                        value="{{configJson.stratux_address}}" />
                 </td>
             </tr>
         </table>
@@ -85,12 +101,11 @@
         <input type="submit" value="UPDATE" />
     </form>
     <script>
-        document.getElementById("flip_horizontal").checked = {{configJson.flip_horizontal}};
-        document.getElementById("flip_vertical").checked = {{configJson.flip_vertical}};
-        document.getElementById("aithre").checked = {{configJson.aithre}};
+        document.getElementById("flip_horizontal").checked = {{ configJson.flip_horizontal }};
+        document.getElementById("flip_vertical").checked = {{ configJson.flip_vertical }};
+        document.getElementById("aithre").checked = {{ configJson.aithre }};
         var units = "{{configJson.distance_units}}";
-        if(units.length < 1)
-        {
+        if (units.length < 1) {
             units = "statute";
         }
 

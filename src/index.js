@@ -13,12 +13,12 @@ const isPi = require("detect-rpi");
 
 function getAddress() {
   var hostAddress = ip.address();
-  //return isPi() ? hostAddress : "localhost";
+
   return hostAddress;
 }
 
 function getWebServerPort() {
-  return isPi() ? 80 : 3000;
+  return 3000;
 }
 
 function getHudRestUri() {
@@ -97,7 +97,7 @@ function getBoolean(inputString) {
     if (inputString == undefined) {
       return false;
     }
-    
+
     inputString = inputString.toLowerCase();
 
     return inputString == "true" || inputString == "on";
@@ -139,6 +139,38 @@ function handleJsonResponse(restRes, resolve, reject) {
   } else {
     reject({ error: restRes.statusCode });
   }
+}
+
+/**
+ * Signals the HUD to move to the next view
+ *
+ * @returns the JSON result from the call
+ */
+function nextView() {
+  return new Promise((resolve, reject) => {
+    request
+      .get(getHudRestUri() + "/view/next")
+      .on("error", function (err) {
+        console.log(err);
+        reject(err.message);
+      })
+  });
+}
+
+/**
+ * Signals the HUD to move to the next view
+ *
+ * @returns the JSON result from the call
+ */
+function previousView() {
+  return new Promise((resolve, reject) => {
+    request
+      .get(getHudRestUri() + "/view/next")
+      .on("error", function (err) {
+        console.log(err);
+        reject(err.message);
+      })
+  });
 }
 
 function getHudConfig() {
@@ -255,6 +287,14 @@ app.get("/view_elements", (request, response) => {
     });
 });
 
+app.get("/view/previous", (request, response) => {
+  previousView();
+});
+
+app.get("/view/next", (request, response) => {
+  nextView();
+});
+
 app.get("/views", (request, response) => {
   getViewsConfig()
     .then(function (jsonConfig) {
@@ -332,7 +372,7 @@ app.post("/", function (request, response) {
   renderPage(response, updateHash, "current_config");
 });
 
-app.use(function(request, response) {
+app.use(function (request, response) {
   response.status(404);
   response.render("404");
 });
