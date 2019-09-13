@@ -154,6 +154,9 @@ function nextView() {
         console.log(err);
         reject(err.message);
       })
+      .on("response", function(response) {
+        resolve(response)
+    })
   });
 }
 
@@ -165,11 +168,14 @@ function nextView() {
 function previousView() {
   return new Promise((resolve, reject) => {
     request
-      .get(getHudRestUri() + "/view/next")
+      .get(getHudRestUri() + "/view/previous")
       .on("error", function (err) {
         console.log(err);
         reject(err.message);
       })
+      .on("response", function(response) {
+        resolve(response)
+    })
   });
 }
 
@@ -288,11 +294,23 @@ app.get("/view_elements", (request, response) => {
 });
 
 app.get("/view/previous", (request, response) => {
-  previousView();
+  previousView()
+    .then(function (jsonConfig) {
+      response.redirect('/');
+    })
+    .catch(function (error) {
+      renderRefused(response, error);
+    });
 });
 
 app.get("/view/next", (request, response) => {
-  nextView();
+  nextView()
+    .then(function (jsonConfig) {
+      response.redirect('/');
+    })
+    .catch(function (error) {
+      renderRefused(response, error);
+    });
 });
 
 app.get("/views", (request, response) => {
