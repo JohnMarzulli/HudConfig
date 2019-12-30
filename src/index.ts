@@ -1,14 +1,13 @@
 // index.js
 // @ts-check
 
-const path = require("path");
-const request = require("request");
-const dateformat = require("dateformat");
-const express = require("express");
-const bodyParser = require("body-parser");
-const expressHandlebars = require("express-handlebars");
-const ip = require("ip");
-const isPi = require("detect-rpi");
+import path from "path";
+import request from "request";
+import dateformat from "dateformat";
+import express from "express";
+import bodyParser from "body-parser";
+import expressHandlebars from "express-handlebars";
+import ip from "ip";
 
 
 function getAddress() {
@@ -23,13 +22,13 @@ function getWebServerPort() {
 
 function getHudRestUri() {
   var hostScheme = "http";
-  var hostUri = hostScheme + "://" + getAddress() + ":8080";
+  var hostUri = `${hostScheme}://${getAddress()}:8080`;
 
   return hostUri;
 }
 
-console.log("Assuming HUD can be contacted at " + getHudRestUri());
-console.log("Starting Web/NodeJs on " + getWebServerPort());
+console.log(`Assuming HUD can be contacted at ${getHudRestUri()}`);
+console.log(`Starting Web/NodeJs on ${getWebServerPort()}`);
 
 
 /**
@@ -40,7 +39,11 @@ console.log("Starting Web/NodeJs on " + getWebServerPort());
  * @param {*} value
  * @returns
  */
-function mergeIntoHash(hash, key, value) {
+function mergeIntoHash(
+  hash: any,
+  key: string,
+  value: any
+): any {
   if (hash == undefined) {
     hash = {};
   }
@@ -54,37 +57,42 @@ function mergeIntoHash(hash, key, value) {
 
 const app = express();
 
-function getHudUrl(payload) {
+function getStratuxRequest(
+  requestDirectory: string,
+  payload = null
+): any {
   return {
-    url: getHudRestUri() + "/settings",
+    url: `${getHudRestUri()}/${requestDirectory}`,
     //hostname: "localhost",
     //path: "/settings",
     //port: 8080,
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: payload
-  };
+  }
 }
 
-function getHudElements(payload) {
-  return {
-    url: getHudRestUri() + "/view_elements",
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: payload
-  };
+function getHudUrl(
+  payload?: any
+): any {
+  return getStratuxRequest("settings", payload);
 }
 
-function getHudViews(payload) {
-  return {
-    url: getHudRestUri() + "/views",
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: payload
-  };
+function getHudElements(
+  payload?: any
+): any {
+  return getStratuxRequest("view_elements", payload);
 }
 
-function getNumber(inputString) {
+function getHudViews(
+  payload?: any
+): any {
+  return getStratuxRequest("views", payload);
+}
+
+function getNumber(
+  inputString: string
+): number {
   try {
     return Number(inputString);
   } catch (error) {
@@ -92,7 +100,9 @@ function getNumber(inputString) {
   }
 }
 
-function getBoolean(inputString) {
+function getBoolean(
+  inputString: string
+): boolean {
   try {
     if (inputString == undefined) {
       return false;
@@ -117,12 +127,14 @@ app.engine(
 app.set("view engine", ".hbs");
 app.set("views", path.join(__dirname, "../views"));
 
-var jsonResultText = "";
-
-function handleSettingResponse(restRes, resolve, reject) {
+function handleSettingResponse(
+  restRes: request.Response,
+  resolve: any,
+  reject: any
+) {
   if (restRes.statusCode >= 200 && restRes.statusCode < 300) {
-    restRes.on("data", function (jsonResult) {
-      console.log("BODY: " + jsonResult);
+    restRes.on("data", function (jsonResult: string) {
+      console.log(`BODY: ${jsonResult}`);
       resolve(JSON.parse(JSON.parse(jsonResult)));
     });
   } else {
@@ -130,15 +142,35 @@ function handleSettingResponse(restRes, resolve, reject) {
   }
 }
 
-function handleJsonResponse(restRes, resolve, reject) {
+function handleJsonResponse(
+  restRes: request.Response,
+  resolve: any,
+  reject: any
+) {
   if (restRes.statusCode >= 200 && restRes.statusCode < 300) {
-    restRes.on("data", function (jsonResult) {
-      console.log("BODY: " + jsonResult);
+    restRes.on("data", function (jsonResult: string) {
+      console.log(`BODY: ${jsonResult}`);
       resolve(JSON.parse(jsonResult));
     });
   } else {
     reject({ error: restRes.statusCode });
   }
+}
+
+function changeView(
+  view: string
+) {
+  return new Promise((resolve, reject) => {
+    request
+      .get(`${getHudRestUri()}/view/${view}`)
+      .on("error", function (err) {
+        console.log(err);
+        reject(err.message);
+      })
+      .on("response", function (response) {
+        resolve(response)
+      })
+  });
 }
 
 /**
@@ -147,17 +179,7 @@ function handleJsonResponse(restRes, resolve, reject) {
  * @returns the JSON result from the call
  */
 function nextView() {
-  return new Promise((resolve, reject) => {
-    request
-      .get(getHudRestUri() + "/view/next")
-      .on("error", function (err) {
-        console.log(err);
-        reject(err.message);
-      })
-      .on("response", function(response) {
-        resolve(response)
-    })
-  });
+  return changeView("next");
 }
 
 /**
@@ -166,23 +188,13 @@ function nextView() {
  * @returns the JSON result from the call
  */
 function previousView() {
-  return new Promise((resolve, reject) => {
-    request
-      .get(getHudRestUri() + "/view/previous")
-      .on("error", function (err) {
-        console.log(err);
-        reject(err.message);
-      })
-      .on("response", function(response) {
-        resolve(response)
-    })
-  });
+  return changeView("previous");
 }
 
 function getHudConfig() {
   return new Promise((resolve, reject) => {
     request
-      .get(getHudUrl()["url"])
+      .get(getHudUrl(null)["url"])
       .on("error", function (err) {
         console.log(err);
         reject(err.message);
@@ -216,34 +228,40 @@ function getViewsConfig() {
         reject(err.message);
       })
       .on("response", function (response) {
-        response.body;
         handleJsonResponse(response, resolve, reject);
       });
   });
 }
 
-function postHudConfig(updateHash) {
+function postHudConfig(
+  updateHash: any
+) {
   var options = getHudUrl(JSON.stringify(updateHash));
 
-  request.put(getHudViews["url"], options).on("error", function (error) {
+  request.put(getHudViews()["url"], options).on("error", function (error) {
     console.log(error);
   });
 }
 
-function postViews(viewConfigs) {
+function postViews(
+  viewConfigs: any
+) {
   var updateHash = {
     views: JSON.parse(viewConfigs)
   };
   var options = getHudViews(JSON.stringify(updateHash));
 
-  request(options, function (error, response, body) {
+  request(options, function (error: string | undefined, response: any, body: any) {
     if (error) throw new Error(error);
 
     console.log(body);
   });
 }
 
-function renderRefused(response, error) {
+function renderRefused(
+  response: any,
+  error: string
+) {
   console.log("Render");
 
   response.render("refused", {
@@ -252,7 +270,11 @@ function renderRefused(response, error) {
   });
 }
 
-function renderPage(response, jsonConfig, page = "home") {
+function renderPage(
+  response: any,
+  jsonConfig: any,
+  page = "home"
+) {
   console.log("Render");
   response.render(page, {
     time: dateformat(Date.now(), "dd-mm-yy hh:MM:ss TT"),
@@ -260,7 +282,13 @@ function renderPage(response, jsonConfig, page = "home") {
   });
 }
 
-function renderViewPage(response, path, jsonConfig, title, updateEnabled) {
+function renderViewPage(
+  response: any,
+  pagePath: string,
+  jsonConfig: any,
+  title: string,
+  updateEnabled: boolean
+) {
   console.log("Render");
   var rowCount = jsonConfig.split("\n").length;
   if (rowCount < 10) {
@@ -268,7 +296,7 @@ function renderViewPage(response, path, jsonConfig, title, updateEnabled) {
   }
 
   response.render("json_config", {
-    path: path,
+    path: pagePath,
     title: title,
     time: dateformat(Date.now(), "dd-mm-yy hh:MM:ss TT"),
     configJson: jsonConfig,
