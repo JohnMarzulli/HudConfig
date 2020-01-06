@@ -12,17 +12,34 @@ var express_1 = __importDefault(require("express"));
 var body_parser_1 = __importDefault(require("body-parser"));
 var express_handlebars_1 = __importDefault(require("express-handlebars"));
 var ip_1 = __importDefault(require("ip"));
+var isPi = require('detect-rpi');
+var defaultStratuxAddress = "192.168.10.1";
+/**
+ * Returns the address of the Stratux/ADS-B receiver.
+ *
+ * If the server *is NOT* running on a Pi, then it
+ * returns the default address for a Stratux running on a Pi.
+ *
+ * If it is a Pi, then returns the local address.
+ *
+ * @returns {string}
+ */
 function getAddress() {
-    var hostAddress = ip_1.default.address();
+    var hostAddress = isPi()
+        ? ip_1.default.address()
+        : defaultStratuxAddress;
     return hostAddress;
 }
+/**
+ * Get the port that the StratuxHud is running on.
+ *
+ * @returns {number}
+ */
 function getWebServerPort() {
     return 3000;
 }
 function getHudRestUri() {
-    var hostScheme = "http";
-    var hostUri = hostScheme + "://" + getAddress() + ":8080";
-    return hostUri;
+    return "http://" + getAddress() + ":8080";
 }
 console.log("Assuming HUD can be contacted at " + getHudRestUri());
 console.log("Starting Web/NodeJs on " + getWebServerPort());
@@ -92,22 +109,21 @@ app.engine(".hbs", express_handlebars_1.default({
 }));
 app.set("view engine", ".hbs");
 app.set("views", path_1.default.join(__dirname, "../views"));
-function handleSettingResponse(restRes, resolve, reject) {
-    if (restRes.statusCode >= 200 && restRes.statusCode < 300) {
-        restRes.on("data", function (jsonResult) {
-            console.log("BODY: " + jsonResult);
-            resolve(JSON.parse(JSON.parse(jsonResult)));
-        });
-    }
-    else {
-        reject({ error: restRes.statusCode });
-    }
-}
 function handleJsonResponse(restRes, resolve, reject) {
+    var responseBody = '';
     if (restRes.statusCode >= 200 && restRes.statusCode < 300) {
-        restRes.on("data", function (jsonResult) {
-            console.log("BODY: " + jsonResult);
-            resolve(JSON.parse(jsonResult));
+        restRes.on("data", function (data) {
+            responseBody += data;
+        });
+        restRes.on("end", function () {
+            console.log("BODY: " + responseBody);
+            var firstLevelParse = JSON.parse(responseBody);
+            if (typeof (firstLevelParse) === 'string') {
+                resolve(JSON.parse(firstLevelParse));
+            }
+            else {
+                resolve(firstLevelParse);
+            }
         });
     }
     else {
@@ -152,7 +168,7 @@ function getHudConfig() {
             reject(err.message);
         })
             .on("response", function (response) {
-            handleSettingResponse(response, resolve, reject);
+            handleJsonResponse(response, resolve, reject);
         });
     });
 }
