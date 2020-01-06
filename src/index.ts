@@ -2,32 +2,20 @@
 // @ts-check
 
 import path from "path";
-import request from "request";
+import request, { CoreOptions } from "request";
 import dateformat from "dateformat";
 import express from "express";
 import bodyParser from "body-parser";
 import expressHandlebars from "express-handlebars";
 import ip from "ip";
 
-const isPi = require('detect-rpi');
-const defaultStratuxAddress: string = "192.168.10.1";
-
 /**
  * Returns the address of the Stratux/ADS-B receiver.
- * 
- * If the server *is NOT* running on a Pi, then it
- * returns the default address for a Stratux running on a Pi.
- * 
- * If it is a Pi, then returns the local address.
  *
  * @returns {string}
  */
 function getAddress(): string {
-  var hostAddress = isPi()
-    ? ip.address()
-    : defaultStratuxAddress;
-
-  return hostAddress;
+  return ip.address();
 }
 
 /**
@@ -248,10 +236,23 @@ function getViewsConfig() {
 function postHudConfig(
   updateHash: any
 ) {
-  var options = getHudUrl(JSON.stringify(updateHash));
+  var url: string = getHudUrl()["url"];
 
-  request.put(getHudViews()["url"], options).on("error", function (error) {
-    console.log(error);
+  return new Promise(function (resolve, reject) {
+    request.put(
+      url,
+      { json: updateHash },
+      function optionalCallback(
+        err,
+        httpResponse,
+        body
+      ) {
+        if (err) {
+          reject(err);
+          return console.error('upload failed:', err);
+        }
+        console.log('Upload successful!  Server responded with:', body);
+      });
   });
 }
 

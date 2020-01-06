@@ -12,23 +12,13 @@ var express_1 = __importDefault(require("express"));
 var body_parser_1 = __importDefault(require("body-parser"));
 var express_handlebars_1 = __importDefault(require("express-handlebars"));
 var ip_1 = __importDefault(require("ip"));
-var isPi = require('detect-rpi');
-var defaultStratuxAddress = "192.168.10.1";
 /**
  * Returns the address of the Stratux/ADS-B receiver.
- *
- * If the server *is NOT* running on a Pi, then it
- * returns the default address for a Stratux running on a Pi.
- *
- * If it is a Pi, then returns the local address.
  *
  * @returns {string}
  */
 function getAddress() {
-    var hostAddress = isPi()
-        ? ip_1.default.address()
-        : defaultStratuxAddress;
-    return hostAddress;
+    return ip_1.default.address();
 }
 /**
  * Get the port that the StratuxHud is running on.
@@ -199,9 +189,15 @@ function getViewsConfig() {
     });
 }
 function postHudConfig(updateHash) {
-    var options = getHudUrl(JSON.stringify(updateHash));
-    request_1.default.put(getHudViews()["url"], options).on("error", function (error) {
-        console.log(error);
+    var url = getHudUrl()["url"];
+    return new Promise(function (resolve, reject) {
+        request_1.default.put(url, { json: updateHash }, function optionalCallback(err, httpResponse, body) {
+            if (err) {
+                reject(err);
+                return console.error('upload failed:', err);
+            }
+            console.log('Upload successful!  Server responded with:', body);
+        });
     });
 }
 function postViews(viewConfigs) {
