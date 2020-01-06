@@ -63,35 +63,26 @@ const app = express();
 
 function getStratuxRequest(
   requestDirectory: string,
-  payload = null
 ): any {
-  return {
-    url: `${getHudRestUri()}/${requestDirectory}`,
-    //hostname: "localhost",
-    //path: "/settings",
-    //port: 8080,
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: payload
-  }
+  return `${getHudRestUri()}/${requestDirectory}`;
 }
 
 function getHudUrl(
   payload?: any
 ): any {
-  return getStratuxRequest("settings", payload);
+  return getStratuxRequest("settings");
 }
 
 function getHudElements(
   payload?: any
 ): any {
-  return getStratuxRequest("view_elements", payload);
+  return getStratuxRequest("view_elements");
 }
 
 function getHudViews(
   payload?: any
 ): any {
-  return getStratuxRequest("views", payload);
+  return getStratuxRequest("views");
 }
 
 function getNumber(
@@ -194,7 +185,7 @@ function previousView() {
 function getHudConfig() {
   return new Promise((resolve, reject) => {
     request
-      .get(getHudUrl(null)["url"])
+      .get(getHudUrl())
       .on("error", function (err) {
         console.log(err);
         reject(err.message);
@@ -208,7 +199,7 @@ function getHudConfig() {
 function getViewElementsConfig() {
   return new Promise((resolve, reject) => {
     request
-      .get(getHudElements()["url"])
+      .get(getHudElements())
       .on("error", function (err) {
         console.log(err);
         reject(err.message);
@@ -222,7 +213,7 @@ function getViewElementsConfig() {
 function getViewsConfig() {
   return new Promise((resolve, reject) => {
     request
-      .get(getHudViews()["url"])
+      .get(getHudViews())
       .on("error", function (err) {
         console.log(err);
         reject(err.message);
@@ -233,11 +224,10 @@ function getViewsConfig() {
   });
 }
 
-function postHudConfig(
+function putConfig(
+  url: string,
   updateHash: any
 ) {
-  var url: string = getHudUrl()["url"];
-
   return new Promise(function (resolve, reject) {
     request.put(
       url,
@@ -252,23 +242,22 @@ function postHudConfig(
           return console.error('upload failed:', err);
         }
         console.log('Upload successful!  Server responded with:', body);
+      }).on("end", () => {
+        resolve();
       });
   });
+}
+
+function postHudConfig(
+  updateHash: any
+) {
+  putConfig(getHudUrl(), updateHash);
 }
 
 function postViews(
   viewConfigs: any
 ) {
-  var updateHash = {
-    views: JSON.parse(viewConfigs)
-  };
-  var options = getHudViews(JSON.stringify(updateHash));
-
-  request(options, function (error: string | undefined, response: any, body: any) {
-    if (error) throw new Error(error);
-
-    console.log(body);
-  });
+  putConfig(getHudViews(), viewConfigs);
 }
 
 function renderRefused(
@@ -295,7 +284,7 @@ function renderPage(
   });
 }
 
-function renderViewPage(
+function renderTextConfigPage(
   response: any,
   pagePath: string,
   jsonConfig: any,
@@ -303,16 +292,14 @@ function renderViewPage(
   updateEnabled: boolean
 ) {
   console.log("Render");
-  var rowCount = jsonConfig.split("\n").length;
-  if (rowCount < 10) {
-    rowCount = 10;
-  }
+  var jsonString: string = JSON.stringify(jsonConfig, null, 4);
+  var rowCount: number = jsonString.split("\n").length;
 
   response.render("json_config", {
     path: pagePath,
     title: title,
     time: dateformat(Date.now(), "dd-mm-yy hh:MM:ss TT"),
-    configJson: jsonConfig,
+    configJson: jsonString,
     rowCount: rowCount,
     disabled: updateEnabled ? "" : "disabled"
   });
@@ -321,7 +308,7 @@ function renderViewPage(
 app.get("/view_elements", (request, response) => {
   getViewElementsConfig()
     .then(function (jsonConfig) {
-      renderViewPage(
+      renderTextConfigPage(
         response,
         "/view_elements",
         jsonConfig,
@@ -357,7 +344,7 @@ app.get("/view/next", (request, response) => {
 app.get("/views", (request, response) => {
   getViewsConfig()
     .then(function (jsonConfig) {
-      renderViewPage(response, "/views", jsonConfig, "Elements", true);
+      renderTextConfigPage(response, "/views", jsonConfig, "Elements", true);
     })
     .catch(function (error) {
       renderRefused(response, error);
@@ -380,7 +367,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.post("/views", function (request, response) {
   postViews(request.body.configJson);
-  renderViewPage(
+  renderTextConfigPage(
     response,
     "/view_elements",
     request.body.configJson,

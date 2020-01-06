@@ -51,26 +51,17 @@ function mergeIntoHash(hash, key, value) {
     return hash;
 }
 var app = express_1.default();
-function getStratuxRequest(requestDirectory, payload) {
-    if (payload === void 0) { payload = null; }
-    return {
-        url: getHudRestUri() + "/" + requestDirectory,
-        //hostname: "localhost",
-        //path: "/settings",
-        //port: 8080,
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: payload
-    };
+function getStratuxRequest(requestDirectory) {
+    return getHudRestUri() + "/" + requestDirectory;
 }
 function getHudUrl(payload) {
-    return getStratuxRequest("settings", payload);
+    return getStratuxRequest("settings");
 }
 function getHudElements(payload) {
-    return getStratuxRequest("view_elements", payload);
+    return getStratuxRequest("view_elements");
 }
 function getHudViews(payload) {
-    return getStratuxRequest("views", payload);
+    return getStratuxRequest("views");
 }
 function getNumber(inputString) {
     try {
@@ -152,7 +143,7 @@ function previousView() {
 function getHudConfig() {
     return new Promise(function (resolve, reject) {
         request_1.default
-            .get(getHudUrl(null)["url"])
+            .get(getHudUrl())
             .on("error", function (err) {
             console.log(err);
             reject(err.message);
@@ -165,7 +156,7 @@ function getHudConfig() {
 function getViewElementsConfig() {
     return new Promise(function (resolve, reject) {
         request_1.default
-            .get(getHudElements()["url"])
+            .get(getHudElements())
             .on("error", function (err) {
             console.log(err);
             reject(err.message);
@@ -178,7 +169,7 @@ function getViewElementsConfig() {
 function getViewsConfig() {
     return new Promise(function (resolve, reject) {
         request_1.default
-            .get(getHudViews()["url"])
+            .get(getHudViews())
             .on("error", function (err) {
             console.log(err);
             reject(err.message);
@@ -188,8 +179,7 @@ function getViewsConfig() {
         });
     });
 }
-function postHudConfig(updateHash) {
-    var url = getHudUrl()["url"];
+function putConfig(url, updateHash) {
     return new Promise(function (resolve, reject) {
         request_1.default.put(url, { json: updateHash }, function optionalCallback(err, httpResponse, body) {
             if (err) {
@@ -197,19 +187,16 @@ function postHudConfig(updateHash) {
                 return console.error('upload failed:', err);
             }
             console.log('Upload successful!  Server responded with:', body);
+        }).on("end", function () {
+            resolve();
         });
     });
 }
+function postHudConfig(updateHash) {
+    putConfig(getHudUrl(), updateHash);
+}
 function postViews(viewConfigs) {
-    var updateHash = {
-        views: JSON.parse(viewConfigs)
-    };
-    var options = getHudViews(JSON.stringify(updateHash));
-    request_1.default(options, function (error, response, body) {
-        if (error)
-            throw new Error(error);
-        console.log(body);
-    });
+    putConfig(getHudViews(), viewConfigs);
 }
 function renderRefused(response, error) {
     console.log("Render");
@@ -226,17 +213,15 @@ function renderPage(response, jsonConfig, page) {
         configJson: jsonConfig
     });
 }
-function renderViewPage(response, pagePath, jsonConfig, title, updateEnabled) {
+function renderTextConfigPage(response, pagePath, jsonConfig, title, updateEnabled) {
     console.log("Render");
-    var rowCount = jsonConfig.split("\n").length;
-    if (rowCount < 10) {
-        rowCount = 10;
-    }
+    var jsonString = JSON.stringify(jsonConfig, null, 4);
+    var rowCount = jsonString.split("\n").length;
     response.render("json_config", {
         path: pagePath,
         title: title,
         time: dateformat_1.default(Date.now(), "dd-mm-yy hh:MM:ss TT"),
-        configJson: jsonConfig,
+        configJson: jsonString,
         rowCount: rowCount,
         disabled: updateEnabled ? "" : "disabled"
     });
@@ -244,7 +229,7 @@ function renderViewPage(response, pagePath, jsonConfig, title, updateEnabled) {
 app.get("/view_elements", function (request, response) {
     getViewElementsConfig()
         .then(function (jsonConfig) {
-        renderViewPage(response, "/view_elements", jsonConfig, "View Elements", false);
+        renderTextConfigPage(response, "/view_elements", jsonConfig, "View Elements", false);
     })
         .catch(function (error) {
         renderRefused(response, error);
@@ -271,7 +256,7 @@ app.get("/view/next", function (request, response) {
 app.get("/views", function (request, response) {
     getViewsConfig()
         .then(function (jsonConfig) {
-        renderViewPage(response, "/views", jsonConfig, "Elements", true);
+        renderTextConfigPage(response, "/views", jsonConfig, "Elements", true);
     })
         .catch(function (error) {
         renderRefused(response, error);
@@ -291,7 +276,7 @@ app.use(body_parser_1.default.json());
 app.use(body_parser_1.default.urlencoded({ extended: true }));
 app.post("/views", function (request, response) {
     postViews(request.body.configJson);
-    renderViewPage(response, "/view_elements", request.body.configJson, "View Elements", false);
+    renderTextConfigPage(response, "/view_elements", request.body.configJson, "View Elements", false);
 });
 app.post("/", function (request, response) {
     var updateHash = mergeIntoHash({}, "data_source", request.body.data_source);
