@@ -1,6 +1,7 @@
 /* CSS Static file for Express and Handlebars */
 body {
-  width: 100%;
+  width: auto;
+  height: fit-content;
   padding: -10%;
   text-align: center;
   background-color: whitesmoke;
