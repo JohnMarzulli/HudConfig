@@ -7,8 +7,9 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch Program",
-            "program": "${workspaceFolder}/build/index.js"
+            "name": "HudConfig",
+            "program": "${workspaceFolder}/build/index.js",
+            "preLaunchTask": "tsc: build - tsconfig.json",
         }
     ]
 }
