@@ -159,7 +159,7 @@ function changeView(
         reject(err.message);
       })
       .on("response", function (response) {
-        resolve(response)
+        resolve(response);
       })
   });
 }
