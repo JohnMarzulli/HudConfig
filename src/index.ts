@@ -160,7 +160,7 @@ function changeView(
       })
       .on("response", function (response) {
         resolve(response);
-      })
+      });
   });
 }
 
@@ -352,9 +352,13 @@ app.get("/views", (request, response) => {
 });
 
 app.get("/", (request, response) => {
+  renderPage(response, null);
+});
+
+app.get("/config", (request, response) => {
   getHudConfig()
     .then(function (jsonConfig) {
-      renderPage(response, jsonConfig);
+      renderPage(response, jsonConfig, "config");
     })
     .catch(function (error) {
       renderRefused(response, error);

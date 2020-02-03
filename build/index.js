@@ -263,9 +263,12 @@ app.get("/views", function (request, response) {
     });
 });
 app.get("/", function (request, response) {
+    renderPage(response, null);
+});
+app.get("/config", function (request, response) {
     getHudConfig()
         .then(function (jsonConfig) {
-        renderPage(response, jsonConfig);
+        renderPage(response, jsonConfig, "config");
     })
         .catch(function (error) {
         renderRefused(response, error);
