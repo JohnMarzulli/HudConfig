@@ -8,7 +8,7 @@
       "type": "node",
       "request": "launch",
       "name": "HudConfig",
-      "program": "${workspaceFolder}\\build\\index.js",
+      "program": "${workspaceFolder}/build/index.js",
       "preLaunchTask": "tsc: build - tsconfig.json",
       "skipFiles": ["<node_internals>/**"],
       "outFiles": ["${workspaceFolder}/**/*.js"]
