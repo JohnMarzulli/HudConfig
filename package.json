@@ -4,7 +4,12 @@
   "description": "## Introduction",
   "version": "1.7.0",
   "main": "dist/index.js",
-  "dependencies": {},
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-handlebars": "^3.1.0",
+    "handlebars": "^4.7.2",
+    "request": "^2.88.2"
+  },
   "devDependencies": {
     "typescript": "^3.8.3",
     "@types/dateformat": "^3.0.1",
@@ -16,10 +21,7 @@
     "dateformat": "^3.0.3",
     "dateformate": "^1.1.0",
     "detect-rpi": "^1.4.0",
-    "express": "^4.17.1",
-    "express-handlebars": "^3.1.0",
-    "ip": "^1.1.5",
-    "request": "^2.88.2"
+    "ip": "^1.1.5"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
