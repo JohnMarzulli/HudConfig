@@ -1,0 +1,101 @@
+<h2>CONFIG</h2>
+<datalist id="units">
+    <option value="statute">Statute</option>
+    <option value="knots">Knots</option>
+    <option value="metric">Metric</option>
+</datalist>
+<datalist id="boolean">
+    <option value="true">True</option>
+    <option value="false">False</option>
+</datalist>
+<p>
+    <form name="settingsForm" action="/" method="POST">
+        <h3>Common Settings</h3>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Value</th>
+            </tr>
+            <tr>
+                <td>No Report Removal Time</td>
+                <td><input name="traffic_report_removal_minutes" id="traffic_report_removal_minutes" type="number"
+                        value="{{configJson.traffic_report_removal_minutes}}" /></td>
+            </tr>
+            <tr>
+                <td>Units</td>
+                <td style="align-items: flex-start; align-content: flex-start; text-align: left;">
+                    <input type="radio" name="distance_units" class="form-radio" value="statute">&nbsp;Statute<br>
+                    <input type="radio" name="distance_units" class="form-radio" value="knots">&nbsp;Knots<br>
+                    <input type="radio" name="distance_units" class="form-radio" value="metric">&nbsp;Metric<br><br>
+                </td>
+            </tr>
+            <tr>
+                <td>Aithre</td>
+                <td style="align-items: flex-start; align-content: flex-start; text-align: left;">
+                    <label class="switch">
+                        <input name="aithre" id="aithre" type="checkbox">
+                        <span class="slider round"></span>
+                    </label>
+                </td>
+            </tr>
+            <tr>
+                <td>Flip Horizontal</td>
+                <td style="align-items: flex-start; align-content: flex-start; text-align: left;">
+                    <label class="switch">
+                        <input name="flip_horizontal" id="flip_horizontal" type="checkbox">
+                        <span class="slider round"></span>
+                    </label>
+                </td>
+            </tr>
+            <tr>
+                <td>Flip Vertical</td>
+                <td style="align-items: flex-start; align-content: flex-start; text-align: left;">
+                    <label class="switch">
+                        <input name="flip_vertical" id="flip_vertical" type="checkbox">
+                        <span class="slider round"></span>
+                    </label>
+                </td>
+            </tr>
+            <tr>
+                <td>Declination</td>
+                <td><input name="declination" id="declination" type="number" value="{{configJson.declination}}" /></td>
+            </tr>
+        </table>
+        <br>
+        <br>
+        <h3>Advanced Settings</h3>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Value</th>
+            </tr>
+            <tr>
+                <td>Data Source</td>
+                <td><input name="data_source" id="data_source" type="text" value="{{configJson.data_source}}" /></td>
+            </tr>
+            <tr>
+                <td>Data IP Address</td>
+                <td>
+                    <input name="stratux_address" id="stratux_address" type="text"
+                        value="{{configJson.stratux_address}}" />
+                </td>
+            </tr>
+        </table>
+        <br>
+        <br>
+        <input type="submit" value="UPDATE" />
+    </form>
+    <script>
+        document.getElementById("flip_horizontal").checked = {{ configJson.flip_horizontal }};
+        document.getElementById("flip_vertical").checked = {{ configJson.flip_vertical }};
+        document.getElementById("aithre").checked = {{ configJson.aithre }};
+        var units = "{{configJson.distance_units}}";
+        if (units.length < 1) {
+            units = "statute";
+        }
+
+        document.settingsForm.distance_units.value = units;
+    </script>
+</p>
+<br>
+<p>Page load at {{time}}</p>

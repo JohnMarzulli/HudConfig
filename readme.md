@@ -2,12 +2,11 @@
 
 ## Introduction
 
-This project aims to bring an easy way to configure and control a StratuxHud.
-It also aims to make the setup process easier.
+This project aims to bring an easy way to configure and control a StratuxHud. It also aims to make the setup process easier.
 
-_*NOTE:*_ This project relies on having a [Stratux](http://stratux.me/) build with AHRS and GPS. A suitable build can be done for less than $150 (USD).
+__NOTE:__ This project relies on having a [Stratux](http://stratux.me/) build with AHRS and GPS. A suitable build can be done for less than $150 (USD).
 
-_*NOTE:*_ This project relies on having a [StratuxHud](https://github.com/JohnMarzulli/StratuxHud)
+__NOTE:__ This project relies on having a [StratuxHud](https://github.com/JohnMarzulli/StratuxHud)
 
 ## Using
 
@@ -22,8 +21,8 @@ Navigate (using your phone, tablet, or other browser) to `http://<ip>:3000`
 There are three main views:
 
 - [Settings](#Settings)
-- [Views](Views)
-- [Elements](Elements)
+- <Views>
+- <Elements>
 
 ### Settings
 
@@ -31,17 +30,15 @@ This provides a simple interface to the configuration of the StratuxHud
 
 #### Data Source
 
-The type of source the HUD should use. This should be left to `stratux` 99% of the time.
-Setting to `simulation` will ignore the ADS-B receiver and run it in a "demo mode".
+The type of source the HUD should use. This should be left to `stratux` 99% of the time. Setting to `simulation` will ignore the ADS-B receiver and run it in a "demo mode".
 
 #### Data IP Address
 
-This is the address of the ADS-B receiver that the HUD will draw data from.
-This should be `192.168.10.1` 99% of the time.
+This is the address of the ADS-B receiver that the HUD will draw data from. This should be `192.168.10.1` 99% of the time.
 
 #### No Report Removal Time
 
-This is the number of minutes after a _*not*_ receiving a report that traffic is removed from the view.
+This is the number of minutes after a __not__ receiving a report that traffic is removed from the view.
 
 #### Units
 
@@ -71,8 +68,7 @@ Set to `true` if you are using a "Teleprompter Glass" build.
 
 The adjustment of the compass based on magnetic variance.
 
-Set to `0` to leave in "true".
-Set to your local value for `magnetic` readings.
+Set to `0` to leave in "true". Set to your local value for `magnetic` readings.
 
 #### Update
 
@@ -84,16 +80,15 @@ This allows you to customize the views available in the HUD.
 
 Before editing these settings, please take some time to become familiar with the JSON file format.
 
-The `elements` section allows you to add or remove elements within a view.
-The `name` field is the "friendly" name of the view and is displayed the upper left hand corner of the HUD.
+The `elements` section allows you to add or remove elements within a view. The `name` field is the "friendly" name of the view and is displayed the upper left hand corner of the HUD.
 
 Views will be shown in the order they are listed. The first view will be the default view at boot.
 
-_*NOTE:*_ The element names need to match the names listed on the "Elements" page. Capitalization and spelling matter.
+__NOTE:__ The element names need to match the names listed on the "Elements" page. Capitalization and spelling matter.
 
 You may modify the text and then click or tap the `UPDATE` button.
 
-```JSON
+```json
 [
     {
         "elements": [
@@ -152,9 +147,9 @@ Example of element names are:
 - `ADSB Target Bugs`
 - `System Info`
 
-_*NOTE:*_ Capitalization and spelling matter when using these to modify the [Views](#Views) configuration.
+__NOTE:__ Capitalization and spelling matter when using these to modify the [Views](#Views) configuration.
 
-```JSON
+```json
 {
     "G Load": {
         "detail_font": true,
@@ -210,12 +205,11 @@ _*NOTE:*_ Capitalization and spelling matter when using these to modify the [Vie
 ## Installation
 
 1. `cd ~`
-2. `curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -`
-    1. If you see an error, run this again. It may take a few tries.
-3. `sudo apt install nodejs`
-4. `sudo apt install npm`. Answer yes to all.
-5. `git clone https://github.com/JohnMarzulli/HudConfig`
-6. `cd HudConfig`
+2. `git clone https://github.com/JohnMarzulli/HudConfig`
+3. `cd HudConfig`
+4. `./install_hudconfig_raspberry_pi.sh`
+5. `sudo apt install nodejs`
+6. `sudo apt install npm`. Answer yes to all.
 7. `npm install`
 8. `npm install request`
 9. `npm install dateformat`
@@ -224,8 +218,10 @@ _*NOTE:*_ Capitalization and spelling matter when using these to modify the [Vie
 12. `npm install detect-rpi`
 13. `npm install ip`
 14. `crontab -e`
-    1. Add a line at the bottom:
-    2. `@reboot sudo nodejs /home/pi/HudConfig/src/index.js &`
+
+  1. Add a line at the bottom:
+  2. `@reboot sudo nodejs /home/pi/HudConfig/build/index.js &`
+
 15. Save the file.
 16. `sudo reboot now`
 
@@ -233,4 +229,4 @@ _*NOTE:*_ Capitalization and spelling matter when using these to modify the [Vie
 
 This project is covered by the GPL v3 license.
 
-Please see [LICENSE](LICENSE)
+Please see <LICENSE>

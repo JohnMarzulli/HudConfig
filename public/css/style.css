@@ -1,6 +1,7 @@
 /* CSS Static file for Express and Handlebars */
 body {
-  width: 100%;
+  width: auto;
+  height: fit-content;
   padding: -10%;
   text-align: center;
   background-color: whitesmoke;
@@ -84,11 +85,47 @@ input[type="submit"] {
   background-color: white;
   color: teal;
 }
+input[type="button"] {
+  size: 150%;
+  font-size: 32pt;
+  font-weight: bolder;
+  border: 1;
+  border-color: black;
+  background: none;
+  box-shadow: none;
+  border-radius: none;
+  -webkit-appearance: none;
+  background-color: white;
+  color: teal;
+}
+button {
+  size: 150%;
+  font-size: 32pt;
+  font-weight: bolder;
+  border: 1;
+  border-color: black;
+  background: none;
+  box-shadow: none;
+  border-radius: none;
+  -webkit-appearance: none;
+  background-color: white;
+  color: teal;
+}
 input[type="checkbox"] {
   -webkit-appearance: checkbox;
 }
 
 input[type="submit"]:hover {
+  background-color: teal;
+  color: white;
+}
+
+input[type="button"]:hover {
+  background-color: teal;
+  color: white;
+}
+
+button:hover {
   background-color: teal;
   color: white;
 }
