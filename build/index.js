@@ -12,6 +12,7 @@ var express_1 = __importDefault(require("express"));
 var body_parser_1 = __importDefault(require("body-parser"));
 var express_handlebars_1 = __importDefault(require("express-handlebars"));
 var ip_1 = __importDefault(require("ip"));
+var isPi = require("detect-rpi");
 /**
  * Returns the address of the Stratux/ADS-B receiver.
  *
@@ -26,6 +27,9 @@ function getAddress() {
  * @returns {number}
  */
 function getWebServerPort() {
+    if (isPi()) {
+        return 80;
+    }
     return 3000;
 }
 function getHudRestUri() {
@@ -45,7 +49,9 @@ function mergeIntoHash(hash, key, value) {
     if (hash == undefined) {
         hash = {};
     }
-    if (value != undefined) {
+    if (value != undefined
+        && value != null
+        && !isNaN(value)) {
         hash[key] = value;
     }
     return hash;
@@ -86,7 +92,15 @@ function getBoolean(inputString) {
 app.engine(".hbs", express_handlebars_1.default({
     defaultLayout: "main",
     extname: ".hbs",
-    layoutsDir: path_1.default.join(__dirname, "../views/layouts")
+    layoutsDir: path_1.default.join(__dirname, "../views/layouts"),
+    helpers: {
+        ifeq: function (a, b, options) {
+            if (a == b) {
+                return options.fn(this);
+            }
+            return options.inverse(this);
+        }
+    }
 }));
 app.set("view engine", ".hbs");
 app.set("views", path_1.default.join(__dirname, "../views"));

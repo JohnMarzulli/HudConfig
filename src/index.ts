@@ -9,6 +9,8 @@ import bodyParser from "body-parser";
 import expressHandlebars from "express-handlebars";
 import ip from "ip";
 
+const isPi = require(`detect-rpi`)
+
 /**
  * Returns the address of the Stratux/ADS-B receiver.
  *
@@ -24,6 +26,10 @@ function getAddress(): string {
  * @returns {number}
  */
 function getWebServerPort(): number {
+  if (isPi()) {
+    return 80
+  }
+
   return 3000;
 }
 
@@ -52,7 +58,9 @@ function mergeIntoHash(
     hash = {};
   }
 
-  if (value != undefined) {
+  if (value != undefined
+    && value != null
+    && !isNaN(value)) {
     hash[key] = value;
   }
 
@@ -116,7 +124,13 @@ app.engine(
   expressHandlebars({
     defaultLayout: "main",
     extname: ".hbs",
-    layoutsDir: path.join(__dirname, "../views/layouts")
+    layoutsDir: path.join(__dirname, "../views/layouts"),
+    helpers: {
+      ifeq: function (a: any, b: any, options: any) {
+        if (a == b) { return options.fn(this); }
+        return options.inverse(this);
+      }
+    }
   })
 );
 app.set("view engine", ".hbs");

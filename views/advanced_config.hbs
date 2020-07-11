@@ -17,6 +17,11 @@
                 <th>Value</th>
             </tr>
             <tr>
+                <td>No Report Removal Time</td>
+                <td><input name="traffic_report_removal_minutes" id="traffic_report_removal_minutes" type="number"
+                        value="{{configJson.traffic_report_removal_minutes}}" /></td>
+            </tr>
+            <tr>
                 <td>Units</td>
                 <td style="align-items: flex-start; align-content: flex-start; text-align: left;">
                     <input type="radio" name="distance_units" class="form-radio" value="statute">&nbsp;Statute<br>
@@ -28,8 +33,7 @@
                 <td>Aithre</td>
                 <td style="align-items: flex-start; align-content: flex-start; text-align: left;">
                     <label class="switch">
-                        <input onchange="settingsForm.submit()" name="aithre" id="aithre" type="checkbox" value="true"
-                            {{#if configJson.aithre}}checked{{/if}} />
+                        <input name="aithre" id="aithre" type="checkbox">
                         <span class="slider round"></span>
                     </label>
                 </td>
@@ -38,8 +42,7 @@
                 <td>Flip Horizontal</td>
                 <td style="align-items: flex-start; align-content: flex-start; text-align: left;">
                     <label class="switch">
-                        <input onchange="settingsForm.submit()" name="flip_horizontal" id="flip_horizontal" type="checkbox" value="true"
-                            {{#if configJson.flip_horizontal}}checked{{/if}} />
+                        <input name="flip_horizontal" id="flip_horizontal" type="checkbox">
                         <span class="slider round"></span>
                     </label>
                 </td>
@@ -48,18 +51,39 @@
                 <td>Flip Vertical</td>
                 <td style="align-items: flex-start; align-content: flex-start; text-align: left;">
                     <label class="switch">
-                        <input onchange="settingsForm.submit()" name="flip_vertical" id="flip_vertical" type="checkbox" value="true"
-                            {{#if configJson.flip_vertical}}checked{{/if}} />
+                        <input name="flip_vertical" id="flip_vertical" type="checkbox">
                         <span class="slider round"></span>
                     </label>
                 </td>
             </tr>
             <tr>
                 <td>Declination</td>
-                <td><input onchange="settingsForm.submit()" name="declination" id="declination" type="number" value="{{configJson.declination}}" /></td>
+                <td><input name="declination" id="declination" type="number" value="{{configJson.declination}}" /></td>
             </tr>
         </table>
         <br>
+        <br>
+        <h3>Advanced Settings</h3>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Value</th>
+            </tr>
+            <tr>
+                <td>Data Source</td>
+                <td><input name="data_source" id="data_source" type="text" value="{{configJson.data_source}}" /></td>
+            </tr>
+            <tr>
+                <td>Data IP Address</td>
+                <td>
+                    <input name="stratux_address" id="stratux_address" type="text"
+                        value="{{configJson.stratux_address}}" />
+                </td>
+            </tr>
+        </table>
+        <br>
+        <br>
+        <input type="submit" value="UPDATE" />
     </form>
     <script>
         document.getElementById("flip_horizontal").checked = {{ configJson.flip_horizontal }};
@@ -73,3 +97,5 @@
         document.settingsForm.distance_units.value = units;
     </script>
 </p>
+<br>
+<p>Page load at {{time}}</p>
