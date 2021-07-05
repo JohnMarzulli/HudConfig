@@ -9,7 +9,7 @@ import bodyParser from "body-parser";
 import expressHandlebars from "express-handlebars";
 import ip from "ip";
 
-const isPi = require(`detect-rpi`)
+const isPi = require(`detect-rpi`);
 
 /**
  * Returns the address of the Stratux/ADS-B receiver.
@@ -27,7 +27,7 @@ function getAddress(): string {
  */
 function getWebServerPort(): number {
   if (isPi()) {
-    return 80
+    return 80;
   }
 
   return 3000;
@@ -242,7 +242,7 @@ function putConfig(
   url: string,
   updateHash: any
 ) {
-  return new Promise(function (resolve, reject) {
+  return new Promise<void>(function (resolve, reject) {
     request.put(
       url,
       { json: updateHash },
@@ -398,39 +398,36 @@ app.post("/", function (request, response) {
   var updateHash = mergeIntoHash({}, "data_source", request.body.data_source);
   updateHash = mergeIntoHash(
     updateHash,
+    "enable_declination",
+    getBoolean(request.body.enable_declination));
+  updateHash = mergeIntoHash(
+    updateHash,
     "declination",
-    getNumber(request.body.declination)
-  );
+    getNumber(request.body.declination));
   updateHash = mergeIntoHash(
     updateHash,
     "distance_units",
-    request.body.distance_units
-  );
+    request.body.distance_units);
   updateHash = mergeIntoHash(
     updateHash,
     "aithre",
-    getBoolean(request.body.aithre)
-  );
+    getBoolean(request.body.aithre));
   updateHash = mergeIntoHash(
     updateHash,
     "flip_horizontal",
-    getBoolean(request.body.flip_horizontal)
-  );
+    getBoolean(request.body.flip_horizontal));
   updateHash = mergeIntoHash(
     updateHash,
     "flip_vertical",
-    getBoolean(request.body.flip_vertical)
-  );
+    getBoolean(request.body.flip_vertical));
   updateHash = mergeIntoHash(
     updateHash,
     "stratux_address",
-    request.body.stratux_address
-  );
+    request.body.stratux_address);
   updateHash = mergeIntoHash(
     updateHash,
     "traffic_report_removal_minutes",
-    getNumber(request.body.traffic_report_removal_minutes)
-  );
+    getNumber(request.body.traffic_report_removal_minutes));
 
   postHudConfig(updateHash);
   renderPage(response, updateHash, "current_config");

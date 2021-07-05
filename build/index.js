@@ -297,6 +297,7 @@ app.post("/views", function (request, response) {
 });
 app.post("/", function (request, response) {
     var updateHash = mergeIntoHash({}, "data_source", request.body.data_source);
+    updateHash = mergeIntoHash(updateHash, "enable_declination", getBoolean(request.body.enable_declination));
     updateHash = mergeIntoHash(updateHash, "declination", getNumber(request.body.declination));
     updateHash = mergeIntoHash(updateHash, "distance_units", request.body.distance_units);
     updateHash = mergeIntoHash(updateHash, "aithre", getBoolean(request.body.aithre));
