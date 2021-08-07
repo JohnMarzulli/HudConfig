@@ -17,11 +17,6 @@
             <th>Value</th>
         </tr>
         <tr>
-            <td>No Report Removal Time</td>
-            <td><input name="traffic_report_removal_minutes" id="traffic_report_removal_minutes" type="number"
-                    value="{{configJson.traffic_report_removal_minutes}}" /></td>
-        </tr>
-        <tr>
             <td>Units</td>
             <td style="align-items: flex-start; align-content: flex-start; text-align: left;">
                 <input type="radio" name="distance_units" class="form-radio" value="statute">&nbsp;Statute<br>
@@ -63,29 +58,6 @@
                     <input name="enable_declination" id="enable_declination" type="checkbox">
                     <span class="slider round"></span>
                 </label>
-            </td>
-        </tr>
-        <tr>
-            <td>Declination</td>
-            <td><input name="declination" id="declination" type="number" value="{{configJson.declination}}" /></td>
-        </tr>
-    </table>
-    <br>
-    <br>
-    <h3>Advanced Settings</h3>
-    <table>
-        <tr>
-            <th>Name</th>
-            <th>Value</th>
-        </tr>
-        <tr>
-            <td>Data Source</td>
-            <td><input name="data_source" id="data_source" type="text" value="{{configJson.data_source}}" /></td>
-        </tr>
-        <tr>
-            <td>Data IP Address</td>
-            <td>
-                <input name="stratux_address" id="stratux_address" type="text" value="{{configJson.stratux_address}}" />
             </td>
         </tr>
     </table>

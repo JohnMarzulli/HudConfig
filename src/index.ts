@@ -59,8 +59,7 @@ function mergeIntoHash(
   }
 
   if (value != undefined
-    && value != null
-    && !isNaN(value)) {
+    && value != null) {
     hash[key] = value;
   }
 
@@ -395,15 +394,10 @@ app.post("/views", function (request, response) {
 });
 
 app.post("/", function (request, response) {
-  var updateHash = mergeIntoHash({}, "data_source", request.body.data_source);
-  updateHash = mergeIntoHash(
+  var updateHash = mergeIntoHash(
     updateHash,
     "enable_declination",
     getBoolean(request.body.enable_declination));
-  updateHash = mergeIntoHash(
-    updateHash,
-    "declination",
-    getNumber(request.body.declination));
   updateHash = mergeIntoHash(
     updateHash,
     "distance_units",
@@ -420,14 +414,6 @@ app.post("/", function (request, response) {
     updateHash,
     "flip_vertical",
     getBoolean(request.body.flip_vertical));
-  updateHash = mergeIntoHash(
-    updateHash,
-    "stratux_address",
-    request.body.stratux_address);
-  updateHash = mergeIntoHash(
-    updateHash,
-    "traffic_report_removal_minutes",
-    getNumber(request.body.traffic_report_removal_minutes));
 
   postHudConfig(updateHash);
   renderPage(response, updateHash, "current_config");

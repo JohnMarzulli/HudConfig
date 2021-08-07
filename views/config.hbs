@@ -1,9 +1,4 @@
 <h2>CONFIG</h2>
-<datalist id="units">
-    <option value="statute">Statute</option>
-    <option value="knots">Knots</option>
-    <option value="metric">Metric</option>
-</datalist>
 <datalist id="boolean">
     <option value="true">True</option>
     <option value="false">False</option>
@@ -17,19 +12,23 @@
             <th>Value</th>
         </tr>
         <tr>
-            <td>Units</td>
+            <td>Display Units</td>
             <td style="align-items: flex-start; align-content: flex-start; text-align: left;">
-                <input type="radio" name="distance_units" class="form-radio" value="statute">&nbsp;Statute<br>
-                <input type="radio" name="distance_units" class="form-radio" value="knots">&nbsp;Knots<br>
-                <input type="radio" name="distance_units" class="form-radio" value="metric">&nbsp;Metric<br><br>
+                <datalist id="display_units">
+                    <option value="statute" />
+                    <option value="knots" />
+                    <option value="metric" />
+                </datalist>
+                <input onchange="settingsForm.submit()" list="display_units" id="distance_units"
+                    name="distance_units" /> <br>
             </td>
         </tr>
         <tr>
             <td>Aithre</td>
             <td style="align-items: flex-start; align-content: flex-start; text-align: left;">
                 <label class="switch">
-                    <input onchange="settingsForm.submit()" name="aithre" id="aithre" type="checkbox" value="true"
-                        {{#if configJson.aithre}}checked{{/if}} />
+                    <input onchange="settingsForm.submit()" name="aithre" id="aithre" type="checkbox" value="true" {{#if
+                        configJson.aithre}}checked{{/if}} />
                     <span class="slider round"></span>
                 </label>
             </td>
@@ -38,8 +37,8 @@
             <td>Flip Horizontal</td>
             <td style="align-items: flex-start; align-content: flex-start; text-align: left;">
                 <label class="switch">
-                    <input onchange="settingsForm.submit()" name="flip_horizontal" id="flip_horizontal" type="checkbox" value="true"
-                        {{#if configJson.flip_horizontal}}checked{{/if}} />
+                    <input onchange="settingsForm.submit()" name="flip_horizontal" id="flip_horizontal" type="checkbox"
+                        value="true" {{#if configJson.flip_horizontal}}checked{{/if}} />
                     <span class="slider round"></span>
                 </label>
             </td>
@@ -48,8 +47,8 @@
             <td>Flip Vertical</td>
             <td style="align-items: flex-start; align-content: flex-start; text-align: left;">
                 <label class="switch">
-                    <input onchange="settingsForm.submit()" name="flip_vertical" id="flip_vertical" type="checkbox" value="true"
-                        {{#if configJson.flip_vertical}}checked{{/if}} />
+                    <input onchange="settingsForm.submit()" name="flip_vertical" id="flip_vertical" type="checkbox"
+                        value="true" {{#if configJson.flip_vertical}}checked{{/if}} />
                     <span class="slider round"></span>
                 </label>
             </td>
@@ -58,15 +57,11 @@
             <td>Enable Declination</td>
             <td style="align-items: flex-start; align-content: flex-start; text-align: left;">
                 <label class="switch">
-                    <input onchange="settingsForm.submit()" name="enable_declination" id="enable_declination" type="checkbox" value="true"
-                        {{#if configJson.enable_declination}}checked{{/if}} />
+                    <input onchange="settingsForm.submit()" name="enable_declination" id="enable_declination"
+                        type="checkbox" value="true" {{#if configJson.enable_declination}}checked{{/if}} />
                     <span class="slider round"></span>
                 </label>
             </td>
-        </tr>
-        <tr>
-            <td>Declination</td>
-            <td><input onchange="settingsForm.submit()" name="declination" id="declination" type="number" value="{{configJson.declination}}" /></td>
         </tr>
     </table>
     <br>
@@ -76,11 +71,7 @@
     document.getElementById("flip_vertical").checked = {{ configJson.flip_vertical }};
     document.getElementById("aithre").checked = {{ configJson.aithre }};
     document.getElementById("enable_declination").checked = {{ configJson.enable_declination }};
-    var units = "{{configJson.distance_units}}";
-    if (units.length < 1) {
-        units = "statute";
-    }
-
-    document.settingsForm.distance_units.value = units;
+    document.getElementById("distance_units").value = {{ configJson.units }};
+    document.settingsForm.distance_units.value = document.getElementById("distance_units").value;
 </script>
 </p>

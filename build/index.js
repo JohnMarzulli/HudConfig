@@ -50,8 +50,7 @@ function mergeIntoHash(hash, key, value) {
         hash = {};
     }
     if (value != undefined
-        && value != null
-        && !isNaN(value)) {
+        && value != null) {
         hash[key] = value;
     }
     return hash;
@@ -296,15 +295,11 @@ app.post("/views", function (request, response) {
     renderTextConfigPage(response, "/view_elements", request.body.configJson, "View Elements", false);
 });
 app.post("/", function (request, response) {
-    var updateHash = mergeIntoHash({}, "data_source", request.body.data_source);
-    updateHash = mergeIntoHash(updateHash, "enable_declination", getBoolean(request.body.enable_declination));
-    updateHash = mergeIntoHash(updateHash, "declination", getNumber(request.body.declination));
+    var updateHash = mergeIntoHash(updateHash, "enable_declination", getBoolean(request.body.enable_declination));
     updateHash = mergeIntoHash(updateHash, "distance_units", request.body.distance_units);
     updateHash = mergeIntoHash(updateHash, "aithre", getBoolean(request.body.aithre));
     updateHash = mergeIntoHash(updateHash, "flip_horizontal", getBoolean(request.body.flip_horizontal));
     updateHash = mergeIntoHash(updateHash, "flip_vertical", getBoolean(request.body.flip_vertical));
-    updateHash = mergeIntoHash(updateHash, "stratux_address", request.body.stratux_address);
-    updateHash = mergeIntoHash(updateHash, "traffic_report_removal_minutes", getNumber(request.body.traffic_report_removal_minutes));
     postHudConfig(updateHash);
     renderPage(response, updateHash, "current_config");
 });
